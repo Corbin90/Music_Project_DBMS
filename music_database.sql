@@ -1,34 +1,39 @@
--- Labels table 101
-drop table if exists LABELS;
+-- Drop the database if it exists
+drop database if exists MUSIC;
+
+-- Create music database
+create database MUSIC;
+
+-- Use the MUSIC database
+use MUSIC;
+
+-- Create table for LABELS
 create table LABELS(
   Label_ID int not null AUTO_INCREMENT,
   Label_Name varchar(50),
   Owner_FName varchar(50),
   Owner_LName varchar(50),
-  State_Location varchar(2),
+  State_Location varchar(50),
   Date_Established date,
   Phone_Number varchar(10),
   Email varchar(75),
   primary key(Label_ID)
 );
-
--- Artists table 201
-drop table if exists ARTISTS;
-create table ARTISTS (
-  Artist_ID int not null,
+-- Create table for Artists
+create table ARTISTS(
+  Artist_ID int not null AUTO_INCREMENT,
   Artist_Name varchar(50),
   F_Name varchar(50),
   L_Name varchar(50),
   Date_Started date,
-  Label_ID int not null AUTO_INCREMENT,
+  Label_ID int not null,
   primary key(Artist_ID),
-  FOREIGN KEY (Label_ID) REFERENCES ARTISTS(Label_ID)
+  FOREIGN KEY (Label_ID) REFERENCES LABELS(Label_ID)
 );
 
--- Manager table 401
-drop table if exists MANAGERS;
+-- Create table for MANAGERS 
 create table MANAGERS(
-  Manager_ID int not null,
+  Manager_ID int not null AUTO_INCREMENT,
   F_Name varchar(50),
   L_Name varchar(50),
   Date_Started date,
@@ -39,15 +44,13 @@ create table MANAGERS(
   FOREIGN KEY (Artist_ID) REFERENCES ARTISTS(Artist_ID)
 );
 
--- Album table 301
-drop table if exists ALBUMS;  
+-- Create table for ALBUMS 
 create table ALBUMS (
   Album_ID int not null AUTO_INCREMENT,
   Album_Name varchar(50),
   Release_Date date,
   Genre varchar(20),
-  Duration time, 
-  RIA_Certification varchar(25),
+  Duration time,
   Artist_ID int not null,
   Label_ID int not null,
   primary key(Album_ID),
@@ -55,14 +58,14 @@ create table ALBUMS (
   FOREIGN KEY (Label_ID) REFERENCES LABELS(Label_ID)
 );
 
--- Sales table 501
-drop table if exists SALES;
+-- Create table for SALES 
 create table SALES (
   Sales_ID int not null AUTO_INCREMENT,
   Units_Sold int,
   Digital_streams int,
-  Total_Sales float(100,2),
-  Genre_Name varchar(15),
+  Total_Units int,
+  RIAA_Certification varchar(25),
+  Last_Updated date,
   Album_ID int not null,
   primary key(Sales_ID),
   FOREIGN KEY (Album_ID) REFERENCES ALBUMS(Album_ID)
@@ -76,37 +79,251 @@ insert into LABELS(Label_Name, Owner_FName, Owner_LName,State_Location, Date_Est
 ('Same Beat Different Mood', 'Rahsaan', 'Corbin', 'Philadelphia, PA','2001-05-02','267-989-0000','differentbeatsamemood@mood.com'),
 ('Gyatt Records', 'Jonathan','Ramjattan', 'Orlando, FL','2002-01-30','321-000-9876','Gyattahaveit@gyattrecords.com');
 
-
 -- Adding data into the Artists table
-insert into ARTISTS values(201, 'Drakes','Drew','Shaffer','1985-03-15', 101),
-                    (206, 'MC RAH', 'Rahsaan', 'Corbin', '1960-12-04', 102),
-                    (211, 'Iron Man', 'Tony', 'Starks', '1978-06-19', 103),
-                    (216, 'Gigi Granite', 'Brooke', 'Good', '1990-08-26',104),
-                    (221, 'Phoenix', 'Lyric', 'Holloway', '2001-05-03',105),
-                    (226, 'Luke Skywalker', 'Mathew', 'Higgins', '2002-01-31',106);
+insert into ARTISTS values(201, 'Drakes','Drew','Shaffer','1985-03-15', 101);
+insert into ARTISTS(Artist_Name, F_Name, L_Name, Date_Started, Label_ID) values('Archon', 'Jonathan', 'Ramjattan', '1993-02-27', 101),
+('Big Bird', 'Guillermo', 'Daniel','1997-05-29', 101),
+('Danny Phantom', 'Dexter', 'Frazier', '2005-12-12', 101),
+('Timmy Turner', 'Daniel', 'Garrison','2012-09-0 7', 101),
+('MC RAH', 'Rahsaan', 'Corbin', '1960-12-04', 102),
+('Darth Vader', 'Donovan', 'Harvey', '1963-01-09', 102),
+('Mace Windu', 'Donovan', 'Noble', '1970-09-09', 102),
+('Invincible', 'Mark', 'Grayson', '1987-06-09', 102),
+('Armored Reiner', 'Erick', 'Rios','2000-04-01', 102),
+('Iron Man', 'Tony', 'Starks', '1978-06-19', 103),
+('The Incredible Hulk', 'Bruce', 'Banner','1980-09-12',103),
+('Spider-Man', 'Peter', 'Parker','1994-10-31',103),
+('Thor', 'Thor', 'Odinson','2017-07-09', 103),
+('Black Widow', 'Natasha', 'Romanoff', '2020-03-13', 103),
+('Gigi Granite', 'Brooke', 'Good', '1990-08-26', 104),
+('Troy Reed', 'Mckinley', 'Johnston', '1996-04-28', 104),
+('Aspen Morgan', 'Donald', 'Jones', '2000-01-01', 104),
+('Jack Green', 'Damari', 'Barry', '2003-03-19', 104),
+('Flora Frost', 'Mariah', 'Rasmussen', '2010-01-03', 104),
+('Phoenix', 'Lyric', 'Holloway', '2001-05-03', 105),
+('Kai Archer', 'Ruth', 'Valenzuela', '2003-06-19', 105),
+('Electric', 'Jesus', 'Bentley','2005-09-27', 105),
+('Ocean Mix', 'Sophia', 'Vance','2009-09-01', 105),
+('Titan', 'Abdullah', 'Kline', '2015-08-04', 105),
+('Luke Skywalker', 'Mathew', 'Higgins', '2002-01-31',106),
+('OB1', 'Marvin', 'Pollard', '2005-05-02',106),
+('Eren', 'Eren', 'Yeager','2007-09-20', 106),
+('Colossal Bert', 'Bertolt', 'Hoover','2010-03-03', 106),
+('Elmo', 'Elmo', 'Monster', '2024-03-09', 106);
 
 
 -- Adding data into the Managers table
-insert into MANAGERS values(401,'Saba', 'Wright', '1985-03-15', '404-242-4924', 'sabawrigght@atl.com', 201),
-                    (406, 'Samia', 'Morris', '1960-12-04', '988-242-2442','samiamorris@atl.com',206),
-                    (411, 'Emmy', 'Sharp', '1978-06-19', '246-242-4562','emmysharp@atl.com',211),
-                    (416, 'Zach', 'Sharp', '1990-08-26', '310-537-3592','zachsharp@atl.com', 216),
-                    (421, 'Reina', 'Scott', '2001-05-03', '563-675-4423','reinascott@atl.com', 221),
-                    (426, 'Matthew', 'Walker','2002-01-31', '285-642-6474', 'matthewwalker@atl.com', 226);
-
+insert into MANAGERS values(301,'Saba', 'Wright', '1985-03-15', '404-242-4924', 'sabawrigght@atl.com', 201);
+insert into MANAGERS(F_Name, L_Name, Date_Started, Phone_number, Email, Artist_ID) values('Lori', 'Conner', '1985-04-01', '407-888-2323', 'jimmydavenport@atl.com',202),
+('Jimmy', 'Davenport', '1987-05-02', '321-222-1522', 'jimmydavenport@atl.com',203),
+('Heleema', 'Pitts', '1987-06-19', '942-252-2562', 'heleemapitts@atl.com',204),
+('Steven', 'Roth', '1988-07-27', '917-442-9294', 'stevenroth@atl.com', 205),
+('Samia', 'Morris', '1960-12-04', '988-242-2442','samiamorris@atl.com',206),
+('Mya', 'Russel', '1989-09-19', '524-666-3343', 'myarussel@atl.com', 207),
+('Claudia', 'Riley', '1990-10-31', '642-525-2567', 'claudiariley@atl.com', 208),
+('Elinor', 'Frost', '1990-11-01', '246-784-2573',	'elinorfrost@atl.com',	209),
+('Aliyah', 'Randall', '1990-11-11', '456-737-8642', 'aliyahrandall@atl.com', 210),
+('Emmy', 'Sharp', '1978-06-19', '246-242-4562','emmysharp@atl.com',211),
+('Ela', 'Benson', '1991-01-12', '876-357-6232',	'elabenson@atl.com',212),
+('Briony', 'Preston', '1991-01-18', '224-256-6731', 'brionypreston@atl.com', 213),
+('Ella', 'Sears', '1992-02-14', '404-888-7575',	'ellasears@atl.com', 214),
+('Seamus', 'Kline', '1993-02-19', '475-295-7248', 'seamuskline@atl.com', 215),
+('Zach', 'Sharp', '1990-08-26', '310-537-3592','zachsharp@atl.com', 216),
+('Samina', 'Graham', '1996-09-12', '242-585-2859', 'saminagraham@atl.com', 217),
+('Michael', 'Scott', '1980-01-01', '528-485-2853', 'michaelscott@atl.com', 218),
+('Carl', 'Bird', '1985-01-19', '423-568-2485', 'carlbird@atl.com', 219),
+('Nick', 'Washed', '1979-10-09', '395-763-4852', 'nickwashed@atl.com', 220),
+('Reina', 'Scott', '2001-05-03', '563-675-4423','reinascott@atl.com', 221),
+('Sarahli', 'Vitarami', '1981-04-01', '356-363-4535', 'sarahlivitarami@atl.com', 222),
+('Cindy', 'Lynch', '1982-04-02', '353-527-5457', 'cindylynch@atl.com',223),
+('Franc',	'Harris', '1990-12-31', '343-675-2346', 'francharris@atl.com', 224),
+('Ernest', 'Carson', '1984-03-13', '735-674-2346', 'ernestcarson@atl.com',	225),
+('Matthew', 'Walker','2002-01-31', '285-642-6474', 'matthewwalker@atl.com', 226),
+('Lionel', 'Messi', '1995-05-01', '336-785-2465', 'lionelmessi@atl.com', 227),
+('Jan', 'Patrick', '1982-05-19', '398-367-4323', 'janpatrick@atl.com', 228),
+('Kirk', 'Howerbringer', '1983-04-04', '356-768-4246', 'kirkhowerbringer@atl.com', 229),
+('Andrew', 'Chaney', '1986-05-25', '223-564-7586', 'andrewchaney@atl.com', 230);
 
 -- Adding data into the Albums table
-insert into ALBUMS values(301,'N.Y Mental State', '2021-04-09', 'Hip Hop','0:55:32', 'Gold', 201,101);
-insert into ALBUMS(Album_Name,Release_Date,Genre,Duration, RIA_Certification, Artist_ID, Label_ID) values('Back At The Barnyard', '1956-02-21', 'Country','01:04:23', 'Gold',206,102),
-('Love Making Music', '1995-02-14', 'R&B','00:52:44', 'Gold',211, 103),
-('Dance Dance Dance Dance', '2005-05-23', 'Pop','00:39:21', 'Gold', 216,104),
-('A Tribe Called Jazz', '2000-06-19', 'Jazz','00:45:22', 'Gold',221, 105),
-('Roll & Rock Vol. 1', '2001-07-04', 'Rock & Roll','00:53:07', 'Gold',226, 106);
+insert into ALBUMS values(401, 'Jazz Hands', '2023-02-03', 'Jazz', '00:45:00', 230, 106);
+insert into ALBUMS(Album_Name, Release_Date, Genre, Duration, Artist_ID, Label_ID) values('Rock & Roll Johnson', '2023-11-09',	'Rock & Roll', '01:02:30', 230, 106),
+('Mumble Rap is Better', '2024-01-04', 'Hip-Hop', '01:00:00', 230, 106),
+('Skating Rink Vol. 1',	'2011-03-15', 'R&B', '00:45:54', 229, 106),
+('Skating Rink Vol. 2', '2012-09-02', 'R&B', '00:46:08', 229, 106),
+('Tappin N Jazzin', '2014-06-08', 'Jazz', '00:44:30', 229, 106),
+('Urban Sermon', '2008-09-09', 'Hip-Hop', '00:54:25', 228, 106),
+('I switched genres',	'2010-02-02', 'Country', '01:05:12', 228, 106),
+('Yeah, Country is it', '2012-07-14', 'Country', '01:03:23', 228, 106),
+('Street Signs', '2005-07-23', 'Hip-Hop', '1:09:25', 227, 106),
+('Healing Hip Hop', '2006-09-12', 'Hip-Hop', '01:00:04', 227, 106),
+('B&R Sounds', '2008-05-23', 'R&B', '00:58:23', 227, 106),
+('Roll & Rock Vol. 1', '2002-07-04', 'Rock & Roll', '00:53:07', 226, 106),
+('Yes, I can sing', '2003-01-09', 'R&B', '00:50:12', 226, 106),
+('Roll & Rock Vol. 2', '2005-12-09', 'Rock & Roll','00:49:14', 226, 106),
+('Get the party hype', '2016-01-09',	'Pop', '00:39:19', 225, 105),
+('Saxophone and Drums', '2017-10-09', 'Jazz', '00:45:00', 225, 105),
+('Hop Hip Tunes', '2019-06-18', 'Hip-Hop', '01:02:30', 225, 105),
+('Bango and Drums', '2009-11-27', 'Country', '01:00:00', 224, 105),
+('Country Nature Sounds', '2010-04-09', 'Country', '00:45:54', 224, 105),
+('New Age of Hip Hop', '2013-03-29', 'Hip-Hop', '00:45:00', 224, 105),
+('Inbox', '2005-11-11', 'R&B', '01:02:30', 223, 105),
+('Stop the violence', '2006-07-09', 'Hip-Hop', '01:00:00', 223, 105),
+('Heal from the violence', '2007-05-22', 'Jazz', '00:45:54', 223, 105),
+('Dragon Ball', '2004-01-30', 'Pop', '01:04:37', 222, 105),
+('Dragon Ball Z', '2005-01-25', 'Pop', '00:45:22', 222, 105),
+('Country Dragon Ball Z', '2007-04-23', 'Country', '01:04:37', 222, 105),
+('A Tribe Called Jazz', '2001-06-19', 'Jazz', '00:45:22', 221, 105),
+('A Tribe Called Rock n Roll', '2003-05-01', 'Rock & Roll', '01:05:12', 221, 105),
+('A Tribe That Sings', '2005-07-09', 'R&B', '01:03:23', 221, 105),
+('Slide into the DMs', '2010-09-07', 'R&B', '01:09:25',	220, 104), 
+('Backflip at Skyzone', '2011-01-14', 'Pop', '01:00:04', 220, 104),
+('Parallelograms', '2012-10-06', 'Pop', '00:58:23', 220, 104),
+('Cornfields', '2003-06-26', 'Country', '01:04:37',	219,	104),
+('Jazz Jams', '2004-02-26', 'Jazz', '00:53:55', 219, 104),
+('The FAMU Tape', '2007-10-03', 'Hip-Hop', '00:59:59', 219, 104),
+('Hot Mulligan', '2000-11-12', 'Rock & Roll', '00:53:55', 218, 104),
+('I am not even a rapper', '2004-02-19', 'Hip-Hop', '01:04:37', 218, 104),
+('How do I play this instrument?', '2006-02-12', 'Jazz', '00:53:55', 218, 104),
+('Luke Skywalker', '1996-10-20', 'Pop', '00:54:02', 217, 104),
+('Moving on', '1999-07-08', 'R&B', '00:53:55', 217, 104),
+('Broken Guitar', '2001-08-21', 'Country', '01:04:37', 217, 104),
+('Dance Dance Dance Dance', '1991-05-23', 'Pop', '01:30:22', 216, 104),
+('New Years Eve',	'1993-12-31', 'R&B', '00:58:23', 216, 104),
+('Do people like Rock&Roll?', '1995-03-05',	'Rock & Roll', '01:04:37',	216, 104),
+('I like Country?',	'2020-06-09',	'Country',	'00:53:55', 215, 103),
+('I love you, I love you',	'2021-01-06', 'R&B', '01:30:22',	215, 103),
+('Life of the party', '2022-03-04',	'Pop',	'00:58:23',	215, 103),
+('I''m hip, the party hops like a rabbit',	'2018-01-12',	'Hip-Hop', '01:04:37', 214, 103),
+('Calm vibez',	'2019-09-14', 'Jazz', '00:53:55', 214, 103),
+('Quarantine Radio', '2020-05-25', 'Pop', '00:53:55',	214, 103),
+('Neck Deep', '1994-11-06', 'Rock & Roll', '00:55:29',213,103),
+('Live in 95',' 1995-08-14','Hip-Hop', '00:58:23', 213, 103),
+('I ate in 98',	'1998-09-01', 'Jazz','01:04:37', 213, 103),
+('Minute Maid', '1980-09-30', 'R&B', '00:59:28', 212, 103),
+('Halloween Heartbreak', '1980-10-31',	'R&B',	'01:04:37', 212, 103),
+('85 For the culture', '1985-11-11', 'Country',	'00:59:28', 212, 103),
+('Love Making Music', '1979-02-14', 'R&B', '00:52:44', 211, 103),
+('Yo, country is dope',	'1981-03-04', 'Country', '00:52:44', 211, 103),
+('Threw a rock', '1985-04-29', 'Rock & Roll', '00:53:55', 211, 103),
+('I broke the wall', '2000-05-09', 'Hip-Hop', '0:55:29', 210, 102),
+('On the run in the country',	'2002-07-04',	'Country', '00:58:23', 210, 102),
+('Armin took my powers', '2004-02-14', 'R&B', '00:58:23', 210, 102),
+('Apples and Bananas', '1988-04-24', 'R&B', '00:58:07', 209, 102),
+('Zumba Music Vol. 1', '1990-09-28',	'Pop', '01:20:03', 209, 102),
+('Zumba Music Vol. 2', '1995-06-27', 'Pop', '00:53:56', 209, 102),
+('Soulful Sounds', '1971-08-12', 'R&B', '00:59:08', 208, 102),
+('The Purple Tape', '1979-09-12', 'Hip-Hop', '01:20:03', 208, 102),
+('I lost my hand', '1980-02-03', 'Pop', '00:53:56', 208, 102),
+('Tractor Tracks', '1964-04-25', 'Country', '00:47:52', 207, 102),
+('I lost my tractor',	'1965-04-20', 'Country', '00:59:08', 207, 102), 
+('I miss my tractor', '1970-10-31', 'R&B', '01:20:03', 207, 102),
+('Back At The Barnyard',	'1961-02-21', 'Country', '01:04:23', 206, 102),
+('Jazz Dance Class', '1963-02-23', 'Jazz', '00:54:25', 206, 102),
+('I am the MC', '1978-08-25', 'Hip-Hop', '01:05:12', 206, 102),
+('Fairly Odd Parents', '2013-03-09', 'Pop', '01:03:23', 205, 101),
+('Poof and Foop', '2017-03-09',	'Pop','01:05:12', 205, 101),
+('Cosmo is a Cow',	'2020-03-13', 'Country','01:03:23', 205, 101),
+('Barnyard', '2006-08-07', 'Country', '00:59:04', 204, 101),
+('They can''t see me', '2008-04-09', 'R&B', '01:05:12', 204, 101),
+('Fighting demons and ghosts',	'2009-01-01',	'R&B', '01:03:23', 204, 101),
+('Stop Signs', '1998-05-23',	'Hip-Hop',	'00:56:27', 203, 101),
+('Feed the Sesame Streets', '1999-09-09', 'Hip-Hop', '00:52:58', 203, 101),
+('I love the Sesame Streets', '2001-01-25', 'R&B', '01:03:23', 203, 101),
+('Kelpie Gs Finest Hits',	'1993-05-25', 'Jazz', '00:52:58', 202, 101),
+('HIP HOP YO', '1994-05-27', 'Hip-Hop', '00:58:23', 202, 101),
+('Pop not soda', '1998-04-01', 'Pop', '00:55:32', 202, 101),
+('I rock the stage', '1990-09-11', 'Rock & Roll', '00:52:58', 201, 101),
+('Saxophone, Trumpet, and Drums',	'2000-01-01', 'Jazz', '00:58:23', 201, 101),
+('NY Mental State', '1985-04-09', 'Hip-Hop', '00:55:32', 201, 101);
 
 -- Adding data into the Sales table
-insert into SALES value(501, 500000, 60000000, 2000000.45, 'Hip Hop', 301);
-insert into SALES(Units_Sold, Digital_streams, Total_Sales, Genre_Name, Album_ID) values(250000, 5000, 1023.87, 'Country', 302),
-(150750, 4000, 987.76, 'R&B', 303),
-(2500000, 6700, 8983.87, 'Pop', 304),
-(650000,5900, 4984.84, 'Jazz', 305),
-(750000, 9000, 5093.50, 'Rock & Roll', 306);
+insert into SALES values(501, 328599, 3768797156, 2841130, 'Multi-Platinum', '2024-04-11', 401);
+insert into SALES(Units_Sold, Digital_Streams, Total_Units, RIAA_Certification, Last_Updated, Album_ID) values(70002, 4885667721, 3327113, 'Multi-Platinum', '2024-04-11', 402),
+(372100, 2148710124, 1804573, 'Platinum', '2024-04-11', 403),
+(190193, 4842506640, 3418530, 'Multi-Platinum', '2024-04-11', 404),
+(368879, 4333238872, 3257704, 'Multi-Platinum', '2024-04-11', 405),
+(167054, 1264601356, 1010121, 'Platinum', '2024-04-11', 406),
+(283574, 984261941, 939748, 'Gold', '2024-04-11', 407),
+(131169, 606751786, 535670, 'Gold', '2024-04-11', 408),
+(98847, 4406934479, 3036803, 'Multi-Platinum',	'2024-04-11', 409),
+(131950, 3513092859, 2474011, 'Multi-Platinum', '2024-04-11', 410),
+(283730, 651222145, 717878, 'Gold', '2024-04-11', 411),
+(255600, 974200530, 905067, 'Gold', '2024-04-11', 412), 
+(319162, 3981278118, 2973347, 'Multi-Platinum', '2024-04-11', 413),
+(319063, 2287383591, 1843985, 'Platinum', '2024-04-11', 414),
+(82010, 2800527157, 1949028, 'Platinum', '2024-04-11', 415),
+(319236, 4094724187, 3049052, 'Multi-Platinum', '2024-04-11', 416),
+(236693, 1260945595, 1077323, 'Platinum', '2024-04-11', 417),
+(362369, 4796450058, 3560002, 'Multi-Platinum', '2024-04-11', 418),
+(238760, 819434809, 785049, 'Gold', '2024-04-11', 419),
+(332391, 1255654127, 1169493, 'Platinum', '2024-04-11', 420),
+(490881, 4185266606, 3281058, 'Multi-Platinum', '2024-04-11', 421),
+(455320, 935634769, 1079076, 'Platinum', '2024-04-11', 422),
+(314077, 1686645619, 1438507, 'Platinum', '2024-04-11', 423),
+(263618, 4016889532, 2941544, 'Multi-Platinum', '2024-04-11', 424),
+(91139, 2261945002, 1599102, 'Platinum', '2024-04-11', 425),
+(431098, 4038467280, 3123409, 'Multi-Platinum', '2024-04-11', 426),
+(439396, 3659974477, 2879378, 'Multi-Platinum',	'2024-04-11', 427),
+(152585, 1806446821, 1356882, 'Platinum', '2024-04-11', 428),
+(172651, 1040665526, 866428, 'Gold', '2024-04-11', 429),
+(240968, 4177498620, 3025967, 'Multi-Platinum', '2024-04-11', 430),
+(443162, 1233339180, 1265388, 'Platinum', '2024-04-11', 431),
+(223567, 4629554958, 3309936, 'Multi-Platinum', '2024-04-11', 432),
+(324393, 4061950277, 3032359, 'Multi-Platinum', '2024-04-11', 433),
+(142408, 1001096192, 809805, 'Gold', '2024-04-11', 434),
+(386020, 730366499, 872930, 'Gold', '2024-04-11', 435),
+(172517, 900596202, 772914, 'Gold', '2024-04-11', 436),
+(489980, 1614733341, 1566468, 'Platinum', 2024-04-11, 437),
+(212931, 3463143224, 2521693, 'Multi-Platinum', '2024-04-11', 438),
+(55423, 2541540018, 1749783, 'Platinum', '2024-04-11', 439),
+(481449, 2514853103, 2158017, 'Multi-Platinum', '2024-04-11', 440),
+(113083, 3461544509, 2420779, 'Multi-Platinum', '2024-04-11', 441),
+(251624, 1769613916, 1431366, 'Platinum', '2024-04-11', 442),
+(211683, 1425699714, 1162149, 'Platinum', '2024-04-11', 443),
+(383062, 1441139352, 1343821, 'Platinum', '2024-04-11', 444),
+(455499, 3786670432, 2979945, 'Multi-Platinum', '2024-04-11', 445),
+(234285, 1977281946, 1552472, 'Platinum', '2024-04-11', 446),
+(56426, 2576047231, 1773790, 'Platinum', '2024-04-11', 447),
+(232082, 4434041664, 3188109, 'Multi-Platinum', '2024-04-11', 448),
+(289257, 289257, 289449, 'N/A', '2024-04-11', 449),
+(140513, 4550427707, 3174131, 'Multi-Platinum', '2024-04-11', 450),
+(494964, 3478359207, 2813870, 'Multi-Platinum', '2024-04-11', 451),
+(94689, 1165835427, 871912, 'Gold', '2024-04-11', 452),
+(211091, 2627506513, 1962762, 'Platinum', '2024-04-11', 453),
+(91946, 519573234, 438328, 'N/A', '2024-04-11', 454),
+(283271, 898571202, 882318, 'Gold', '2024-04-11', 455),
+(203114, 791145439, 730544, 'Gold', '2024-04-11', 456),
+(456583, 4943218645, 3752062, 'Multi-Platinum', '2024-04-11', 457),
+(62272, 2808254808, 1934441, 'Platinum', '2024-04-11', 458),
+(259906,	1941769370,	1554418,'Platinum', '2024-04-11', 459),
+(282810, 2843983705, 2178799, 'Multi-Platinum', '2024-04-11', 460),
+(245767, 2906781963, 2183621, 'Multi-Platinum',	'2024-04-11', 461),
+(421322, 5072443949, 3802951, 'Multi-Platinum', '2024-04-11', 462),
+(354411, 877826232, 939628, 'Gold', '2024-04-11', 463),
+(255188, 3864921866, 2831802, 'Multi-Platinum', '2024-04-11', 464),
+(384838, 2340148919, 1944937, 'Platinum',	'2024-04-11', 465),
+(478433, 4084871040, 3201680, 'Multi-Platinum', '2024-04-11', 466),
+(272711, 1613225816, 1348194, 'Platinum', '2024-04-11', 467),
+(160619, 2470110523, 1807359, 'Platinum', '2024-04-11', 468),
+(427878, 4260748331, 3268376, 'Multi-Platinum', '2024-04-11', 469),
+(340059, 1073157885, 1055497,'Platinum', '2024-04-11',470),
+(489956, 4898645749, 3755719, 'Multi-Platinum', '2024-04-11', 471),
+(421584, 1674875619, 1538167, 'Platinum', '2024-04-11', 472),
+(420436, 1241888362, 1248361, 'Platinum', '2024-04-11', 473),
+(451993, 3596705469, 2849796, 'Multi-Platinum', '2024-04-11', 474),
+(304304, 3280681369, 2491424, 'Multi-Platinum', '2024-04-11', 475),
+(151107, 2400558268, 1751479, 'Platinum', '2024-04-11', 476),
+(425120, 3112894560, 2500383, 'Multi-Platinum', '2024-04-11', 477),
+(341025, 4428811515, 3293566, 'Multi-Platinum', '2024-04-11', 478),
+(384838, 2340148919, 1944937, 'Platinum', '2024-04-11', 479),
+(478433, 4084871040, 3201680, 'Multi-Platinum', '2024-04-11', 480),
+(272711, 1613225816, 1348194, 'Platinum', '2024-04-11', 481),
+(160619, 2470110523, 1807359, 'Platinum', '2024-04-11', 482),
+(427878, 4260748331, 3268376, 'Multi-Platinum', '2024-04-11', 483),
+(340059, 1073157885, 1055497, 'Platinum', '2024-04-11', 484),
+(489956, 4898645749, 3755719, 'Multi-Platinum',	'2024-04-11', 485),
+(421584, 1674875619, 1538167, 'Platinum', '2024-04-11', 486),
+(420436, 1241888362, 1248361, 'Platinum', '2024-04-11', 487),
+(451993, 3596705469, 2829796, 'Multi-Platinum', '2024-04-11', 488),
+(304304, 3280681369, 2491424, 'Multi-Platinum', '2024-04-11', 489),
+(151107, 2400558268, 1751479,'Platinum', '2024-04-11', 490);
