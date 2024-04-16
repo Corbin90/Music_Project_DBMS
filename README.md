@@ -4,6 +4,7 @@ How to run the program:
 2) Run source music_datebase.sql;
 
 Queries to add to C++ code for input:
+
 Show:
 -Artists: select * from ARTISTS;
 -Albums: select * from ALBUMS;
