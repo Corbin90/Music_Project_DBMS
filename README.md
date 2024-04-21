@@ -5,6 +5,11 @@ How to run the program:
 2) Run source music_datebase.sql;
 
 Queries to add to C++ code for input:
+Prompt Structure for main menu:
+1) Show
+2) Find
+3) Add
+4) Exit program
 
 Show:
 1) Artists: select * from ARTISTS;
