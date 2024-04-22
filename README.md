@@ -30,3 +30,9 @@ Add:
 2) Managers: insert into MANAGERS(F_Name, L_Name, Date_Started, Phone_number, Email, Artist_ID) values(inputs go here);
 3) Artists: insert into ARTISTS(Artist_Name, F_Name, L_Name, Date_Started, Label_ID) values(inputs go here);
 4) Sales: insert into SALES(Units_Sold, Digital_Streams, Total_Units, RIAA_Certification, Last_Updated, Album_ID) values(inputs go here);
+
+
+
+# C++ Part
+
+FOR the C++ file, compile with g++ -o output -sqlFinalProject2024/mainFinal.cpp
