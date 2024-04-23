@@ -204,9 +204,7 @@ void findManager(){
     cout << "3. Exit" << endl; 
 
     cin >> opt;
-
     switch(opt){
-
         case 1: 
          cout << "Enter the Manager ID : ";
          cin >> id;
@@ -214,21 +212,15 @@ void findManager(){
          prep_stmt->setInt(1, id);
          res = prep_stmt->executeQuery();
          while (res->next()) {
-
-     
           cout << res->getString("MANAGER_ID") << " ";
           cout << res->getString("F_Name") << " ";
           cout << res->getString("L_Name") << " ";
           cout << res->getString("Date_Started") << " ";
           cout << res->getString("Phone_Number") << " ";
           cout << res->getString("Email") << " ";
-          cout << res->getString("ARTIST_ID") << endl;
-          
-         }
-
-
+          cout << res->getString("ARTIST_ID") << endl; 
+        }
         break;
-
 
         case 2:
          cout << "Enter the Artist ID : ";
@@ -237,25 +229,16 @@ void findManager(){
          prep_stmt->setInt(1, id);
          res = prep_stmt->executeQuery();
          while (res->next()) {
-
-     
           cout << res->getString("MANAGER_ID") << " ";
           cout << res->getString("F_Name") << " ";
           cout << res->getString("L_Name") << " ";
           cout << res->getString("Date_Started") << " ";
           cout << res->getString("Phone_Number") << " ";
           cout << res->getString("Email") << " ";
-          cout << res->getString("ARTIST_ID") << endl;
-          
+          cout << res->getString("ARTIST_ID") << endl; 
          }
-
         break;
-
     }
-
-
-
-
 
     }
 }
@@ -263,24 +246,61 @@ void findAlbum(){
         
 }
 void showArtists(){
-        
+        stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT * from ARTISTS");
+        while (res->next()) {
+          cout << res->getString("Artist_ID") << " ";
+          cout << res->getString("Artist_Name") << " ";
+          cout << res->getString("F_Name") << " ";
+          cout << res->getString("L_Name") << " ";
+          cout << res->getString("Date_Started") << " ";
+          cout << res->getString("Label_ID") << endl;    
+        } 
 }
 void showAlbums(){
-        
+        stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT * from ALBUMS");
+        while (res->next()) {
+          cout << res->getString("Album_ID") << " ";
+          cout << res->getString("Album_Name") << " ";
+          cout << res->getString("Release_Date") << " ";
+          cout << res->getString("Genre") << " ";
+          cout << res->getString("Duration") << " ";
+          cout << res->getString("Artist_ID") << " ";
+          cout << res->getString("Label_ID") << endl;    
+        } 
 }
 void showLabels(){
-        
+        stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT * from LABELS");
+        while (res->next()) {
+          cout << res->getString("Label_ID") << " ";
+          cout << res->getString("Label_Name") << " ";
+          cout << res->getString("Owner_FName") << " ";
+          cout << res->getString("Owner_LName") << " ";
+          cout << res->getString("State_Location") << " ";
+          cout << res->getString("Date_Established") << " ";
+          cout << res->getString("Phone_Number") << " ";
+          cout << res->getString("Email") << endl;    
+        }   
 }
 void showAlbumSales(){
-
+        stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT * from SALES");
+        while (res->next()) {
+          cout << res->getString("Sales_ID") << " ";
+          cout << res->getString("Units_Sold") << " ";
+          cout << res->getString("Digital_streams") << " ";
+          cout << res->getString("Total_Units") << " ";
+          cout << res->getString("RIAA_Certification") << " ";
+          cout << res->getString("Last_Updated") << " ";
+          cout << res->getString("Album_ID") << endl;    
+        }      
 }
 void showManagers(){
-
-         stmt = con->createStatement();
-         res = stmt->executeQuery("SELECT * from MANAGERS");
-         while (res->next()) {
-
-     
+        stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT * from MANAGERS");
+        while (res->next()) {
           cout << res->getString("MANAGER_ID") << " ";
           cout << res->getString("F_Name") << " ";
           cout << res->getString("L_Name") << " ";
@@ -289,6 +309,5 @@ void showManagers(){
           cout << res->getString("Email") << " ";
           cout << res->getString("ARTIST_ID") << endl;
           
-         }
-        
+         }       
 }
