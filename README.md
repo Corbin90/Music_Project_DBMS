@@ -36,3 +36,7 @@ Add:
 # C++ Part
 
 FOR the C++ file, compile with g++ -o output -sqlFinalProject2024/mainFinal.cpp
+
+Other way of running it:
+1)  Compile: g++ -I/usr/include mainFinal.cpp -o sqlFinalProject -I /usr/local/lib -lmysqlcppcon
+2)  Run: ./sqlFinalProject
