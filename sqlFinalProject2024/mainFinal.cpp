@@ -1,11 +1,3 @@
-/*
-  cout << "How would you like to find a Label?: " << endl;
-    cout << "1. by ID" << endl;
-    cout << "2. by Artist ID" << endl;
-    cout << "3. by Album ID" << endl;
-    cout << "4. Exit" << endl; 
-*/
-
 #include <stdlib.h>
 #include <iostream>
 /*
@@ -381,7 +373,48 @@ void findAlbum(){
                         cout << res->getString("Label_Name") << endl; 
                 }
                 break;
+                case 3:
+                        cout << "Enter the Artist ID: ";
+                        cin >> id;
+                        prep_stmt = con->prepareStatement("SELECT ALBUMS.Album_ID, ALBUMS.Album_Name, ALBUMS.Release_Date, ALBUMS.Genre, ALBUMS.Duration, ALBUMS.Artist_ID, ARTISTS.Artist_Name " \
+                                                          "FROM ALBUMS JOIN ARTISTS on ALBUMS.Artist_ID = ARTISTS.Artist_ID "\
+                                                          "WHERE ALBUMS.Artist_ID = ?");
+                        prep_stmt->setInt(1, id);
+                        res = prep_stmt->executeQuery();
+                        while (res->next()) {
+                        cout << res->getInt("Album_ID") << " ";
+                        cout << res->getString("Album_Name") << " ";
+                        cout << res->getString("Release_Date") << " ";
+                        cout << res->getString("Genre") << " ";
+                        cout << res->getString("Duration") << " ";
+                        cout << res->getString("Artist_ID") << " ";
+                        cout << res->getString("Artist_Name") << endl; 
+                }
+                break;
+                case 4:
+                        cout << "Enter the Sales ID: ";
+                        cin >> id;
+                        prep_stmt = con->prepareStatement("SELECT ALBUMS.Album_ID, ALBUMS.Album_Name, ALBUMS.Release_Date, ALBUMS.Genre, ALBUMS.Duration, ALBUMS.Artist_ID, SALES.Units_Sold, SALES.Digital_streams, SALES.Total_Units, SALES.RIAA_Certification, SALES.Last_Updated " \
+                                                          "FROM ALBUMS JOIN SALES on ALBUMS.Album_ID = SALES.Album_ID "\
+                                                          "WHERE SALES.Sales_ID = ?");
+                        prep_stmt->setInt(1, id);
+                        res = prep_stmt->executeQuery();
+                        while (res->next()) {
+                        cout << res->getInt("Album_ID") << " ";
+                        cout << res->getString("Album_Name") << " ";
+                        cout << res->getString("Release_Date") << " ";
+                        cout << res->getString("Genre") << " ";
+                        cout << res->getString("Duration") << " ";
+                        cout << res->getString("Artist_ID") << " ";
+                        cout << res->getString("Units_Sold") << " ";
+                        cout << res->getString("Digital_streams") << " ";
+                        cout << res->getString("Total_Units") << " ";
+                        cout << res->getString("RIAA_Certification") << " ";
+                        cout << res->getString("Last_Updated") << endl; 
+                        }
+                        break;
         }
+     
      }
 }
 void showArtists(){
