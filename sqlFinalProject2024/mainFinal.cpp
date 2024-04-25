@@ -1,11 +1,3 @@
-/*
-  cout << "How would you like to find a Label?: " << endl;
-    cout << "1. by ID" << endl;
-    cout << "2. by Artist ID" << endl;
-    cout << "3. by Album ID" << endl;
-    cout << "4. Exit" << endl; 
-*/
-
 #include <stdlib.h>
 #include <iostream>
 /*
@@ -191,21 +183,71 @@ void addAlbumSales(){
 
 }
 void findArtistbyID(){
-  /*
-  int opt;
-  int id = 0;
-  while(opt!=3){
-    cout << "How would you like to find an Artist?: " << endl;
-    cout << "1. by ID" << endl;
-    cout << "2. by Label ID" << endl;
-    cout << "3. Exit" << endl;
-    cin >> opt;
-    switch(opt){
-      case 1:
-      
-    }
-
-  }*/
+     int opt;
+     int id = 0;
+     while (opt!=4){
+        cout << "How would you like to find the artist(s)?: " << endl;
+        cout << "1. By ID" << endl;
+        cout << "2. By Label ID" << endl;
+        cout << "3. By Manager ID" << endl;
+        cout << "4. Exit" << endl;
+        cin >> opt;
+        switch(opt){
+                case 1:
+                    cout << "Enter the artist's ID: ";
+                    cin >> id;
+                    prep_stmt = con->prepareStatement("SELECT * FROM ARTISTS WHERE ARTIST_ID = ?");
+                    prep_stmt->setInt(1, id);
+                    res = prep_stmt->executeQuery();
+                    while (res->next()) {
+                        cout << res->getString("Artist_ID") << " ";
+                        cout << res->getString("Artist_Name") << " ";
+                        cout << res->getString("F_Name") << " ";
+                        cout << res->getString("L_Name") << " ";
+                        cout << res->getString("Date_Started") << " ";
+                        cout << res->getString("Label_ID") << endl;
+                }
+                break;
+                case 2:
+                    cout << "Enter the Label ID: ";
+                    cin >> id;
+                    prep_stmt = con->prepareStatement("SELECT ARTISTS.Artist_ID, ARTISTS.Artist_Name, ARTISTS.F_Name, ARTISTS.L_Name, ARTISTS.Date_Started, LABELS.Label_Name " \
+                                                        "FROM ARTISTS JOIN LABELS " \
+                                                        "ON ARTISTS.Label_ID=LABELS.Label_ID " \
+                                                        "WHERE LABELS.Label_ID=?");
+                    prep_stmt->setInt(1, id);
+                    res = prep_stmt->executeQuery();
+                    while (res->next()) {
+                        cout << res->getInt("Artist_ID") << " ";
+                        cout << res->getString("Artist_Name") << " ";
+                        cout << res->getString("F_Name") << " ";
+                        cout << res->getString("L_Name") << " ";
+                        cout << res->getString("Date_Started") << " ";
+                        cout << res->getString("Label_Name") << endl;
+                }
+                break;
+                case 3:
+                    cout << "Enter the Manager ID: ";
+                    cin >> id;
+                    prep_stmt = con->prepareStatement("SELECT ARTISTS.Artist_ID, ARTISTS.Artist_Name, ARTISTS.F_Name, ARTISTS.L_Name, ARTISTS.Date_Started, ARTISTS.Label_ID, MANAGERS.F_Name, MANAGERS.L_Name " \
+                                                        "FROM ARTISTS JOIN MANAGERS " \
+                                                        "ON ARTISTS.Artist_ID=MANAGERS.Artist_ID " \
+                                                        "WHERE MANAGERS.Manager_ID=?");
+                    prep_stmt->setInt(1, id);
+                    res = prep_stmt->executeQuery();
+                    while(res->next()){
+                        cout << res->getInt("Artist_ID") << " ";
+                        cout << res->getString("Artist_Name") << " ";
+                        cout << res->getString("F_Name") << " ";
+                        cout << res->getString("L_Name") << " ";
+                        cout << res->getString("Date_Started") << " ";
+                        cout << res->getString("Label_ID") << " ";
+                        cout << res->getString("F_Name") << " ";
+                        cout << res->getString("L_Name") << endl;
+                    }
+                    break;
+        }
+     }
 }
 void findLabel(){
     int opt;
