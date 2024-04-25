@@ -160,11 +160,6 @@ int main(void){
         break;
      }
  }
- 
-
-
-
-
 }
 
 void addLabel(){
@@ -219,6 +214,41 @@ void addAlbum(){
 
 }
 void addArtist(){
+  string artist_name;
+  string f_name;
+  string l_name;
+  string date_started;
+  string label_id;
+  cout << "Enter an artist name: ";
+  cin >> artist_name;
+
+  cout << "Enter a first name: ";
+  cin >> f_name;
+
+  cout << "Enter a last name: ";
+  cin >> l_name;
+
+  cout << "Enter the date started (YYYY-MM-DD): ";
+  cin >> date_started;
+
+  cout <<"Enter a label ID: ";
+  cin >> label_id;
+
+  prep_stmt = con->prepareStatement("INSERT INTO ARTISTS(Artist_Name, F_Name, L_Name,Date_Started, Label_ID) " \
+                                    "VALUES (?, ?, ?, ?, ?)");
+  prep_stmt->setString(1, artist_name);
+  prep_stmt->setString(2, f_name);
+  prep_stmt->setString(3, l_name);
+  prep_stmt->setString(4, date_started);
+  prep_stmt->setString(5, label_id);
+  res=prep_stmt->executeQuery();
+  while (res->next()) {
+                        cout << res->getString("Artist_ID") << " ";
+                        cout << res->getString("F_Name") << " ";
+                        cout << res->getString("L_Name") << " ";
+                        cout << res->getString("Date_Started") << " ";
+                        cout << res->getString("Label_ID") << endl; 
+                }
 
 }
 void addManager(){
