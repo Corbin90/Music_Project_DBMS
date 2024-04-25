@@ -34,7 +34,6 @@ void showLabels();
 void showAlbumSales();
 void showManagers();
 
-
 int main(void){
 
   driver = get_driver_instance();
@@ -252,6 +251,47 @@ void addArtist(){
 
 }
 void addManager(){
+  string f_name;
+  string l_name;
+  string date_started;
+  string phone_number;
+  string email;
+  string artist_id;
+  cout << "Enter a first name: ";
+  cin >> f_name;
+
+  cout << "Enter a last name: ";
+  cin >> l_name;
+
+  cout << "Enter the date started (YYYY-MM-DD): ";
+  cin >> date_started;
+
+  cout << "Enter a phone number: ";
+  cin >> phone_number;
+
+  cout <<"Enter email: ";
+  cin >> email;
+
+  cout <<"Enter an artist ID: ";
+  cin >> artist_id;
+
+  prep_stmt = con->prepareStatement("INSERT INTO MANAGERS(F_Name, L_Name,Date_Started, Phone_number, Email, Artist_ID) " \
+                                    "VALUES (?, ?, ?, ?, ?, ?)");
+  prep_stmt->setString(1, f_name);
+  prep_stmt->setString(2, l_name);
+  prep_stmt->setString(3, date_started);
+  prep_stmt->setString(4, phone_number);
+  prep_stmt->setString(5, email);
+  prep_stmt->setString(6, artist_id);
+  res=prep_stmt->executeQuery();
+  while (res->next()) {
+                        cout << res->getString("F_Name") << " ";
+                        cout << res->getString("L_Name") << " ";
+                        cout << res->getString("Date_Started") << " ";
+                        cout << res->getString("Phone_number") << " ";
+                        cout << res->getString("Email") << " "; 
+                        cout << res->getString("Artist_ID") << endl;
+                }
 
 }
 void addAlbumSales(){
@@ -488,8 +528,7 @@ void findAlbum(){
                         cout << res->getString("Last_Updated") << endl; 
                         }
                         break;
-        }
-     
+        }   
      }
 }
 void showArtists(){
@@ -555,6 +594,5 @@ void showManagers(){
           cout << res->getString("Phone_Number") << " ";
           cout << res->getString("Email") << " ";
           cout << res->getString("ARTIST_ID") << endl;
-          
          }       
 }
