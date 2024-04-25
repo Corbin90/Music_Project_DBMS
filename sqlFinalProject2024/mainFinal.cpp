@@ -1,3 +1,11 @@
+/*
+  cout << "How would you like to find a Label?: " << endl;
+    cout << "1. by ID" << endl;
+    cout << "2. by Artist ID" << endl;
+    cout << "3. by Album ID" << endl;
+    cout << "4. Exit" << endl; 
+*/
+
 #include <stdlib.h>
 #include <iostream>
 /*
@@ -328,7 +336,53 @@ void findManager(){
     }
 }
 void findAlbum(){
-        
+     int opt;
+     int id = 0;
+     while (opt!=5){
+        cout << "How would you like to find the album?: " << endl;
+        cout << "1. By ID" << endl;
+        cout << "2. By Label ID" << endl;
+        cout << "3. By Artist ID" << endl;
+        cout << "4. By Sales ID" << endl;
+        cout << "5. Exit" << endl;
+        cin >> opt;
+        switch(opt){
+                case 1:
+                        cout << "Enter the Album ID : ";
+                        cin >> id;
+                        prep_stmt = con->prepareStatement("SELECT * FROM ALBUMS WHERE Album_ID = ?");
+                        prep_stmt->setInt(1, id);
+                        res = prep_stmt->executeQuery();
+                        while (res->next()) {
+                        cout << res->getString("Album_ID") << " ";
+                        cout << res->getString("Album_Name") << " ";
+                        cout << res->getString("Release_Date") << " ";
+                        cout << res->getString("Genre") << " ";
+                        cout << res->getString("Duration") << " ";
+                        cout << res->getString("Artist_ID") << " ";
+                        cout << res->getString("Label_ID") << endl; 
+                }
+                break;
+                case 2:
+                        cout << "Enter the Label ID: ";
+                        cin >> id;
+                        prep_stmt = con->prepareStatement("SELECT ALBUMS.Album_ID, ALBUMS.Album_Name, ALBUMS.Release_Date, ALBUMS.Genre, ALBUMS.Duration, ALBUMS.Artist_ID, LABELS.Label_Name " \
+                                                        "FROM ALBUMS JOIN LABELS on ALBUMS.Label_ID = LABELS.Label_ID " \
+                                                        "WHERE LABELS.Label_ID = ?");
+                        prep_stmt->setInt(1, id);
+                        res = prep_stmt->executeQuery();
+                        while (res->next()) {
+                        cout << res->getInt("Album_ID") << " ";
+                        cout << res->getString("Album_Name") << " ";
+                        cout << res->getString("Release_Date") << " ";
+                        cout << res->getString("Genre") << " ";
+                        cout << res->getString("Duration") << " ";
+                        cout << res->getString("Artist_ID") << " ";
+                        cout << res->getString("Label_Name") << endl; 
+                }
+                break;
+        }
+     }
 }
 void showArtists(){
         stmt = con->createStatement();
