@@ -6,10 +6,11 @@ How to run the program:
 
 Queries to add to C++ code for input:
 Prompt Structure for main menu:
-1) Show
-2) Find
-3) Add
-4) Exit program
+1) Add data
+2) Show data
+3) Find data
+4) Delete data
+5) Exit program
 
 Show:
 1) Artists: select * from ARTISTS;
