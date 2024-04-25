@@ -1,3 +1,11 @@
+/*
+  cout << "How would you like to find a Label?: " << endl;
+    cout << "1. by ID" << endl;
+    cout << "2. by Artist ID" << endl;
+    cout << "3. by Album ID" << endl;
+    cout << "4. Exit" << endl; 
+*/
+
 #include <stdlib.h>
 #include <iostream>
 /*
@@ -170,8 +178,6 @@ int opt = 6;
 
 }
 
-
-
 void addAlbum(){
 
 }
@@ -185,24 +191,59 @@ void addAlbumSales(){
 
 }
 void findArtistbyID(){
-        
+  /*
+  int opt;
+  int id = 0;
+  while(opt!=3){
+    cout << "How would you like to find an Artist?: " << endl;
+    cout << "1. by ID" << endl;
+    cout << "2. by Label ID" << endl;
+    cout << "3. Exit" << endl;
+    cin >> opt;
+    switch(opt){
+      case 1:
+      
+    }
+
+  }*/
 }
 void findLabel(){
-        
-}
-void findManager(){
-
-
     int opt;
     int id = 0;
-
-
+    while(opt !=2){
+    cout << "How would you like to find a Label?: " << endl;
+    cout << "1. by ID" << endl;
+    cout << "2. Exit" << endl;
+    cin >> opt;
+    switch(opt){
+      case 1:
+        cout << "Enter the Label ID: ";
+        cin >> id; 
+        prep_stmt = con->prepareStatement("SELECT * FROM LABELS WHERE LABEL_ID = ?");
+        prep_stmt->setInt(1, id);
+        res = prep_stmt->executeQuery();
+        while (res->next()) {
+          cout << res->getString("Label_ID") << " ";
+          cout << res->getString("Label_Name") << " ";
+          cout << res->getString("Owner_FName") << " ";
+          cout << res->getString("Owner_LName") << " ";
+          cout << res->getString("State_Location") << " ";
+          cout << res->getString("Date_Established") << " ";
+          cout << res->getString("Phone_Number") << " ";
+          cout << res->getString("Email") << endl; 
+        }
+        break;
+    }
+    }
+}
+void findManager(){ 
+    int opt;
+    int id = 0;
     while(opt !=3){
     cout << "How would you like to find a manager?: " << endl;
     cout << "1. by ID" << endl;
     cout << "2. by Artist" << endl;
     cout << "3. Exit" << endl; 
-
     cin >> opt;
     switch(opt){
         case 1: 
@@ -221,21 +262,23 @@ void findManager(){
           cout << res->getString("ARTIST_ID") << endl; 
         }
         break;
-
         case 2:
          cout << "Enter the Artist ID : ";
          cin >> id;
-         prep_stmt = con->prepareStatement("SELECT * FROM MANAGERS WHERE ARTIST_ID = ?");
+         prep_stmt = con->prepareStatement("SELECT MANAGERS.MANAGER_ID, MANAGERS.F_Name, MANAGERS.L_Name, MANAGERS.Date_Started, MANAGERS.Phone_Number, MANAGERS.Email, ARTISTS.Artist_Name " \
+                                          "FROM MANAGERS JOIN ARTISTS " \
+                                          "ON MANAGERS.Artist_ID = ARTISTS.Artist_ID " \
+                                          "WHERE MANAGERS.Artist_ID = ?");
          prep_stmt->setInt(1, id);
          res = prep_stmt->executeQuery();
          while (res->next()) {
-          cout << res->getString("MANAGER_ID") << " ";
+          cout << res->getInt("MANAGER_ID") << " ";
           cout << res->getString("F_Name") << " ";
           cout << res->getString("L_Name") << " ";
           cout << res->getString("Date_Started") << " ";
           cout << res->getString("Phone_Number") << " ";
           cout << res->getString("Email") << " ";
-          cout << res->getString("ARTIST_ID") << endl; 
+          cout << res->getString("Artist_Name") << endl; 
          }
         break;
     }
