@@ -19,6 +19,7 @@ sql::Statement *stmt;
 sql::ResultSet *res;
 sql::PreparedStatement  *prep_stmt;
 
+void addLabel();
 void addAlbum();
 void addArtist();
 void addManager();
@@ -36,23 +37,19 @@ void showManagers();
 
 int main(void){
 
-driver = get_driver_instance();
-con = driver->connect("tcp://127.0.0.1:3306", "root", "");
-con->setSchema("MUSIC");
-
-
-
-
-int opt = 6;
- 
- while (opt != 4) {
+  driver = get_driver_instance();
+  con = driver->connect("tcp://127.0.0.1:3306", "root", "");
+  con->setSchema("MUSIC");
+  int opt = 6;
+  while (opt != 5) {
      
      cout << endl;
      cout << "Do you want to " << endl;
-     cout << "1. Add Data?" << endl;
-     cout << "2. Find Data?" << endl;
-     cout << "3. Show Data?" << endl;
-     cout << "4. Exit" << endl << endl;
+     cout << "1. Add Data?" << endl; // insert
+     cout << "2. Find Data?" << endl; // find
+     cout << "3. Show Data?" << endl; 
+     cout << "4. Delete Data?" << endl; // Delete
+     cout << "5. Exit" << endl << endl;
      
      cout << "Choice : ";
      cin >> opt;
@@ -62,31 +59,32 @@ int opt = 6;
      switch(opt) {
                 //CASE TO ADD 
 		case 1: 
-                while (opt2 !=5)        {
-                        cout << "1. Add an album" << endl; 
-                        cout << "2. Add an artist" << endl;
-                        cout << "3. Add a manager" << endl;
-                        cout << "4. Add album sales" << endl;
-                        cout << "5. Exit" << endl << endl;
-
-                        cout << "Choice : ";
+                while (opt2 !=6)        {
+                        cout << "1. Add a Label" << endl;
+                        cout << "2. Add an album" << endl; 
+                        cout << "3. Add an artist" << endl;
+                        cout << "4. Add a manager" << endl;
+                        cout << "5. Add album sales" << endl;
+                        cout << "6. Exit" << endl << endl;
+                        cout << "Choice: ";
                         cin >> opt2;
-
                         switch(opt2)
                         {
-                                case 1: 
+                                case 1:
+                                    addLabel();
+                                case 2: 
                                         addAlbum();
                                 break;
 
-                                case 2: 
+                                case 3: 
                                         addArtist();
                                 break;
 
-                                case 3: 
+                                case 4: 
                                         addManager();
                                 break;
 
-                                case 4: 
+                                case 5: 
                                         addAlbumSales();
                                 break;
                         }
@@ -100,8 +98,7 @@ int opt = 6;
                         cout << "3. Find managers" << endl;
                         cout << "4. Find albums " << endl;
                         cout << "5. Exit" << endl << endl;
-
-                        cout << "Choice : ";
+                        cout << "Choice: ";
                         cin >> opt2;
 
                         switch(opt2)
@@ -109,15 +106,12 @@ int opt = 6;
                                 case 1: 
                                         findArtistbyID();
                                 break;
-
                                 case 2: 
                                         findLabel();
                                 break;
-
                                 case 3: 
                                         findManager();
                                 break;
-
                                 case 4: 
                                         findAlbum();
                                 break;
@@ -161,6 +155,9 @@ int opt = 6;
                         }
                 }
 		break;
+    // Case to delete
+        case 4:
+        break;
      }
  }
  
@@ -170,6 +167,54 @@ int opt = 6;
 
 }
 
+void addLabel(){
+  string label_name;
+  string owner_fname;
+  string owner_lname;
+  string state_location;
+  string date_established;
+  string phone_number;
+  string email;
+  cout << "Enter the label name: ";
+  cin >> label_name;
+
+  cout << "Enter the owner's first name: ";
+  cin >> owner_fname;
+
+  cout << "Enter the owner's last name: ";
+  cin >> owner_lname;
+
+  cout << "Enter the location(City,State): ";
+  cin >> state_location;
+
+  cout <<"Enter the date_established(YYYY-MM-DD): ";
+  cin >> date_established;
+
+  cout << "Enter a phone number: ";
+  cin >> phone_number;
+
+  cout << "Enter an email: ";
+  cin >> email;
+  prep_stmt = con->prepareStatement("INSERT INTO LABELS(Label_Name, Owner_FName, Owner_LName,State_Location, Date_Established, Phone_Number, Email) " \
+                                    "VALUES (?, ?, ?, ?, ?, ?, ?)");
+  prep_stmt->setString(1, label_name);
+  prep_stmt->setString(2, owner_fname);
+  prep_stmt->setString(3, owner_lname);
+  prep_stmt->setString(4, state_location);
+  prep_stmt->setString(5, date_established);
+  prep_stmt->setString(6, phone_number);
+  prep_stmt->setString(7, email);
+  res=prep_stmt->executeQuery();
+  while (res->next()) {
+                        cout << res->getString("Label_Name") << " ";
+                        cout << res->getString("Owner_FName") << " ";
+                        cout << res->getString("Owner_LName") << " ";
+                        cout << res->getString("State_Location") << " ";
+                        cout << res->getString("Date_Established") << " ";
+                        cout << res->getString("Phone_Number") << " ";
+                        cout << res->getString("Email") << endl;
+                }
+}
 void addAlbum(){
 
 }
