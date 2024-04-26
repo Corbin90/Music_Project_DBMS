@@ -33,26 +33,28 @@ void showAlbums();
 void showLabels();
 void showAlbumSales();
 void showManagers();
+void findSpecific();
+void deleteCertification();
+void deleteAlbum();
+
 
 int main(void){
-
   driver = get_driver_instance();
   con = driver->connect("tcp://127.0.0.1:3306", "root", "");
   con->setSchema("MUSIC");
   int opt = 6;
-  while (opt != 5) {
-     
+  while (opt != 6) {
      cout << endl;
      cout << "Do you want to " << endl;
      cout << "1. Add Data?" << endl; // insert
      cout << "2. Find Data?" << endl; // find
      cout << "3. Show Data?" << endl; 
      cout << "4. Delete Data?" << endl; // Delete
-     cout << "5. Exit" << endl << endl;
+     cout << "5. Update Data?" << endl; //Update
+     cout << "6. Exit" << endl << endl;
      
      cout << "Choice : ";
      cin >> opt;
-     
      int opt2 = 0;
 
      switch(opt) {
@@ -156,9 +158,30 @@ int main(void){
 		break;
     // Case to delete
         case 4:
+          while (opt2 !=3){
+                          cout << "1. Delete a sale by RIAA Certification" << endl;
+                          cout << "2. Delete an album by Genre" << endl; 
+                          cout << "3. Exit" << endl << endl;
+                          cout << "Choice: ";
+                          cin >> opt2;
+
+                          switch(opt2){
+                            case 1:
+                              deleteCertification();
+                            break;
+                            case 2:
+                              deleteAlbum();
+                            break;
+
+                            
+                          }
+                          }
         break;
-     }
+       
+  
+     
  }
+  }
 }
 
 void addLabel(){
@@ -212,6 +235,29 @@ void addLabel(){
 void addAlbum(){
 
 }
+void deleteCertification(){
+  string certification;
+  cout << "Enter a certification: ";
+  cin >> certification;
+  prep_stmt = con->prepareStatement("DELETE FROM SALES WHERE RIAA_Certification=?");
+  prep_stmt->setString(1, certification);
+  res=prep_stmt->executeQuery();
+  while (res->next()){
+    cout << res->getString("RIAA_Certification") << endl;
+  }
+}
+void deleteAlbum(){
+  string gen;
+  cout << "Enter a a date (YYYY-MM-DD): ";
+  cin >> gen;
+  prep_stmt = con->prepareStatement("DELETE FROM MANAGERS WHERE Date_Started < ?");
+  prep_stmt->setString(1, gen);
+  res=prep_stmt->executeQuery();
+  while (res->next()){
+    cout << res->getString("Date_Established") << endl;
+  }
+}
+
 void addArtist(){
   string artist_name;
   string f_name;
@@ -531,6 +577,8 @@ void findAlbum(){
         }   
      }
 }
+
+
 void showArtists(){
         stmt = con->createStatement();
         res = stmt->executeQuery("SELECT * from ARTISTS");
