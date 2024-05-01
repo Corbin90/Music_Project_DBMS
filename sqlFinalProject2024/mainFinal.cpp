@@ -36,13 +36,13 @@ void showManagers();
 void findSpecific();
 void deleteCertification();
 void deleteAlbum();
-
-
+void RIAA_certchange();
+void updateArtists();
 int main(void){
   driver = get_driver_instance();
   con = driver->connect("tcp://127.0.0.1:3306", "root", "");
   con->setSchema("MUSIC");
-  int opt = 6;
+  int opt = 0;
   while (opt != 6) {
      cout << endl;
      cout << "Do you want to " << endl;
@@ -177,13 +177,40 @@ int main(void){
                           }
                           }
         break;
+        //Update Data
+        case 5:
+        while (opt2!= 3){
+                cout << "1. Would you like to update Update where total_units are less than 1,000,000 to 1,250,750, and RIAA_Certification equal to Platinum?" << endl;
+                cout << "2. Update artists to Label 1 where the start date is between 1986 and 2000" << endl;
+                cout << "3. Exit" <<endl;
+                cin >> opt2;
+                switch(opt2){
+                        case 1:
+                                RIAA_certchange();
+                                break;
+                        case 2:
+                                updateArtists();
+                                break;
+
+                }
+        }
+        break;
        
   
      
  }
   }
 }
-
+void RIAA_certchange(){
+  prep_stmt = con->prepareStatement("UPDATE SALES SET Total_Units = 1250750, RIAA_Certification='Platinum' "\
+                                    "WHERE Total_Units < 1000000;");
+  prep_stmt->executeQuery();
+}
+void updateArtists(){
+  prep_stmt = con->prepareStatement("UPDATE ARTISTS SET Label_ID = 101 " \
+                                    "WHERE Date_Started > '1986-01-01' AND Date_Started < '2000-01-01'");
+  prep_stmt->executeQuery();
+}
 void addLabel(){
   string label_name;
   string owner_fname;
