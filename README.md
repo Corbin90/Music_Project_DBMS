@@ -1,5 +1,7 @@
 # Music_Project_DBMS
 DO NOT CHANGE ANYTHING ON THE music_database.sql FILE!
+Authors: Rahsaan Corbin II, Jonathan Ramjattan
+
 How to run the program:
 1) Once the terminal is open, type mysql
 2) Run source music_datebase.sql;
