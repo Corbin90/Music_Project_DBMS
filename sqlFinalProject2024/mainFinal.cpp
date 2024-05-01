@@ -36,14 +36,20 @@ void showManagers();
 void findSpecific();
 void deleteCertification();
 void deleteAlbum();
+void avgTotalArtistSales();
+void sumOfEachGenre();
+void findAlbumsLessthanHour();
+void SignedAfter2001();
 void RIAA_certchange();
 void updateArtists();
+
+
 int main(void){
   driver = get_driver_instance();
   con = driver->connect("tcp://127.0.0.1:3306", "root", "");
   con->setSchema("MUSIC");
   int opt = 0;
-  while (opt != 6) {
+  while (opt != 7) {
      cout << endl;
      cout << "Do you want to " << endl;
      cout << "1. Add Data?" << endl; // insert
@@ -51,7 +57,8 @@ int main(void){
      cout << "3. Show Data?" << endl; 
      cout << "4. Delete Data?" << endl; // Delete
      cout << "5. Update Data?" << endl; //Update
-     cout << "6. Exit" << endl << endl;
+     cout << "6. Aggregate Data?" << endl;
+     cout << "7. Exit" << endl << endl;
      
      cout << "Choice : ";
      cin >> opt;
@@ -93,13 +100,13 @@ int main(void){
 		break;
                 //CASE TO FIND
                 case 2: 
-                while (opt2 !=5)        {
-                        cout << "1. Find artist" << endl;
-                        cout << "2. Find label" << endl;
-                        cout << "3. Find managers" << endl;
-                        cout << "4. Find albums " << endl;
-                        cout << "5. Exit" << endl << endl;
-                        cout << "Choice: ";
+                while (opt2 != 6){
+                        cout << "1. Find artist by ID" << endl;
+                        cout << "2. Find artists established after 2001 in Label 105" << endl;
+                        cout << "3. Find label" << endl;
+                        cout << "4. Find managers" << endl;
+                        cout << "5. Find albums " << endl;
+                        cout << "6. Exit" << endl << endl;
                         cin >> opt2;
 
                         switch(opt2)
@@ -107,13 +114,15 @@ int main(void){
                                 case 1: 
                                         findArtistbyID();
                                 break;
-                                case 2: 
+                                case 2:
+                                        SignedAfter2001();
+                                case 3: 
                                         findLabel();
                                 break;
-                                case 3: 
+                                case 4: 
                                         findManager();
                                 break;
-                                case 4: 
+                                case 5: 
                                         findAlbum();
                                 break;
                         }
@@ -177,7 +186,7 @@ int main(void){
                           }
                           }
         break;
-        //Update Data
+         //Update Data
         case 5:
         while (opt2!= 3){
                 cout << "1. Would you like to update Update where total_units are less than 1,000,000 to 1,250,750, and RIAA_Certification equal to Platinum?" << endl;
@@ -196,21 +205,31 @@ int main(void){
         }
         break;
        
+       case 6: 
+       while (opt2 !=3)
+       {
+        cout << "1. Find the average of all artists' sales" << endl;
+        cout << "2. Calculate the sum of all genres' sales " << endl;
+        cout << "3. Exit" << endl;
+
+        cin >> opt2;
+
+        switch(opt2)
+        {
+          case 1:
+          avgTotalArtistSales();
+          break;
+          case 2:
+          sumOfEachGenre();
+          break;
+        }
+       }
   
      
  }
   }
 }
-void RIAA_certchange(){
-  prep_stmt = con->prepareStatement("UPDATE SALES SET Total_Units = 1250750, RIAA_Certification='Platinum' "\
-                                    "WHERE Total_Units < 1000000;");
-  prep_stmt->executeQuery();
-}
-void updateArtists(){
-  prep_stmt = con->prepareStatement("UPDATE ARTISTS SET Label_ID = 101 " \
-                                    "WHERE Date_Started > '1986-01-01' AND Date_Started < '2000-01-01'");
-  prep_stmt->executeQuery();
-}
+
 void addLabel(){
   string label_name;
   string owner_fname;
@@ -262,28 +281,7 @@ void addLabel(){
 void addAlbum(){
 
 }
-void deleteCertification(){
-  string certification;
-  cout << "Enter a certification: ";
-  cin >> certification;
-  prep_stmt = con->prepareStatement("DELETE FROM SALES WHERE RIAA_Certification=?");
-  prep_stmt->setString(1, certification);
-  res=prep_stmt->executeQuery();
-  while (res->next()){
-    cout << res->getString("RIAA_Certification") << endl;
-  }
-}
-void deleteAlbum(){
-  string gen;
-  cout << "Enter a a date (YYYY-MM-DD): ";
-  cin >> gen;
-  prep_stmt = con->prepareStatement("DELETE FROM MANAGERS WHERE Date_Started < ?");
-  prep_stmt->setString(1, gen);
-  res=prep_stmt->executeQuery();
-  while (res->next()){
-    cout << res->getString("Date_Established") << endl;
-  }
-}
+
 
 void addArtist(){
   string artist_name;
@@ -518,13 +516,14 @@ void findManager(){
 void findAlbum(){
      int opt;
      int id = 0;
-     while (opt!=5){
+     while (opt!=6){
         cout << "How would you like to find the album?: " << endl;
         cout << "1. By ID" << endl;
         cout << "2. By Label ID" << endl;
         cout << "3. By Artist ID" << endl;
         cout << "4. By Sales ID" << endl;
-        cout << "5. Exit" << endl;
+        cout << "5. Less than 1 hour" << endl;
+        cout << "6. Exit" << endl;
         cin >> opt;
         switch(opt){
                 case 1:
@@ -601,6 +600,9 @@ void findAlbum(){
                         cout << res->getString("Last_Updated") << endl; 
                         }
                         break;
+                        case 5:
+                        findAlbumsLessthanHour();
+                        break;
         }   
      }
 }
@@ -670,4 +672,90 @@ void showManagers(){
           cout << res->getString("Email") << " ";
           cout << res->getString("ARTIST_ID") << endl;
          }       
+}
+
+void deleteCertification(){
+  string certification;
+  cout << "Enter a certification: ";
+  cin >> certification;
+  prep_stmt = con->prepareStatement("DELETE FROM SALES WHERE RIAA_Certification=?");
+  prep_stmt->setString(1, certification);
+  res=prep_stmt->executeQuery();
+  while (res->next()){
+    cout << res->getString("RIAA_Certification") << endl;
+  }
+}
+void deleteAlbum(){
+  string gen;
+  cout << "Enter a a date (YYYY-MM-DD): ";
+  cin >> gen;
+  prep_stmt = con->prepareStatement("DELETE FROM MANAGERS WHERE Date_Started < ?");
+  prep_stmt->setString(1, gen);
+  res=prep_stmt->executeQuery();
+  while (res->next()){
+    cout << res->getString("Date_Established") << endl;
+  }
+}
+
+void avgTotalArtistSales(){
+      stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT ARTISTS.Artist_Name, AVG(SALES.Total_Units)"
+                                 "FROM ARTISTS "
+                                 "JOIN ALBUMS ON ARTISTS.Artist_ID = ALBUMS.Artist_ID "
+                                 "JOIN SALES ON ALBUMS.Album_ID = SALES.Album_ID "
+                                 "GROUP BY ARTISTS.Artist_Name");
+
+
+        while(res->next()){
+          cout << res->getString(1) << " ";
+          cout <<res->getString(2) << endl;
+        }
+
+}
+
+void sumOfEachGenre(){
+  stmt = con->createStatement();
+  res = stmt->executeQuery("SELECT ALBUMS.Genre, SUM(SALES.Total_Units) FROM ALBUMS JOIN SALES ON ALBUMS.Album_ID = SALES.Album_ID Group by ALBUMS.Genre");
+
+  while(res->next()){
+    cout << res->getString(1) << " ";
+    cout << res ->getString(2) << endl;
+  }
+}
+
+void findAlbumsLessthanHour(){
+          stmt = con->createStatement();
+        res = stmt->executeQuery("SELECT * from ALBUMS WHERE Duration < '00:55:00' AND Genre = 'R&B'");
+        while (res->next()) {
+          cout << res->getString("Album_ID") << " ";
+          cout << res->getString("Album_Name") << " ";
+          cout << res->getString("Release_Date") << " ";
+          cout << res->getString("Genre") << " ";
+          cout << res->getString("Duration") << " ";
+          cout << res->getString("Artist_ID") << " ";
+          cout << res->getString("Label_ID") << endl;    
+        } 
+}
+
+void SignedAfter2001(){
+  stmt = con->createStatement();
+  res = stmt->executeQuery("SELECT * from ARTISTS WHERE Label_ID = 105 AND Date_Started > '2001-12-31'");
+  while (res->next()) {
+          cout << res->getString("Artist_ID") << " ";
+          cout << res->getString("Artist_Name") << " ";
+          cout << res->getString("F_Name") << " ";
+          cout << res->getString("L_Name") << " ";
+          cout << res->getString("Date_Started") << " ";
+          cout << res->getString("Label_ID") << endl;    
+        } 
+}
+void RIAA_certchange(){
+  prep_stmt = con->prepareStatement("UPDATE SALES SET Total_Units = 1250750, RIAA_Certification='Platinum' "\
+                                    "WHERE Total_Units < 1000000;");
+  prep_stmt->executeQuery();
+}
+void updateArtists(){
+  prep_stmt = con->prepareStatement("UPDATE ARTISTS SET Label_ID = 101 " \
+                                    "WHERE Date_Started > '1986-01-01' AND Date_Started < '2000-01-01'");
+  prep_stmt->executeQuery();
 }
